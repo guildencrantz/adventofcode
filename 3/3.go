@@ -39,6 +39,14 @@ func main() {
 		panic("Unable to read input file")
 	}
 
+	deliveries := Santa(input)
+	fmt.Printf("%d houses got presents\n", len(deliveries))
+
+	deliveries = RoboSanta(input)
+	fmt.Printf("%d houses got presents with robosanta helping\n", len(deliveries))
+}
+
+func Santa(input []byte) map[House]bool {
 	deliveries := make(map[House]bool)
 	l := House{0, 0}
 	deliveries[l] = true
@@ -47,5 +55,25 @@ func main() {
 		deliveries[l] = true
 	}
 
-	fmt.Printf("%d houses got presents", len(deliveries))
+	return deliveries
+}
+
+func RoboSanta(input []byte) map[House]bool {
+	deliveries := make(map[House]bool)
+
+	s := House{0, 0}
+	deliveries[s] = true
+
+	r := s
+
+	for i, d := range input {
+		if i%2 == 0 {
+			s = s.Move(d)
+			deliveries[s] = true
+		} else {
+			r = r.Move(d)
+			deliveries[r] = true
+		}
+	}
+	return deliveries
 }
